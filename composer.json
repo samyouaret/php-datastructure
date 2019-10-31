@@ -1,0 +1,19 @@
+{
+    "name": "samyouaret/data-structure",
+    "description": "a small library about data strcuture",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "license": "mit",
+    "authors": [{
+        "name": "samyouaret",
+        "email": "samyouaret13@gmail.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "DataStructure\\": "src",
+            "Tests\\": "tests"
+        }
+    }
+}
