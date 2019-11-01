@@ -192,4 +192,15 @@ class LinkedListTest extends TestCase
         $this->assertSame(20, $list->remove(2));
         $this->assertCount(2, $list);
     }
+
+    /** @test */
+    public function list_can_remove_last_item_with_pop_method()
+    {
+        $list = new LinkedList();
+        $list->push(5);
+        $list->push(10);
+        $this->assertSame(10, $list->pop());
+        $this->assertSame(5, $list->pop());
+        $this->assertCount(0, $list);
+    }
 }

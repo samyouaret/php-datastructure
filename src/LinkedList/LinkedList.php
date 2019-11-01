@@ -168,4 +168,9 @@ class LinkedList implements \Countable
         $this->decrement();
         return $value;
     }
+
+    public function pop()
+    {
+        return $this->remove($this->count() - 1);
+    }
 }
