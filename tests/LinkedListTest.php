@@ -16,6 +16,13 @@ class LinkedListTest extends TestCase
     }
 
     /** @test */
+    public function linked_list_is_instance_of_abstract_list()
+    {
+        $list = new LinkedList();
+        $this->assertInstanceOf(\DataStructure\Abstracts\AbstractList::class, $list);
+    }
+
+    /** @test */
     public function linked_list_is_empty()
     {
         $list = new LinkedList();
@@ -30,6 +37,7 @@ class LinkedListTest extends TestCase
         $list = new LinkedList(15);
         $this->assertCount(1, $list);
     }
+
     /** @test */
     public function push_method()
     {
@@ -110,7 +118,6 @@ class LinkedListTest extends TestCase
         $this->assertSame(15, $list->first());
     }
 
-
     /** @test */
     public function get_item_at_given_index_raise_exception_when_list_is_empty()
     {
@@ -166,7 +173,6 @@ class LinkedListTest extends TestCase
         $list = new LinkedList();
         $list->push(5);
         $this->assertSame(5, $list->remove(0));
-        print_r($list);
         $this->assertCount(0, $list);
     }
 
@@ -202,5 +208,45 @@ class LinkedListTest extends TestCase
         $this->assertSame(10, $list->pop());
         $this->assertSame(5, $list->pop());
         $this->assertCount(0, $list);
+    }
+
+    /** @test */
+    public function remove__item_method_raise_exception_when_list_is_empty()
+    {
+        $list = new LinkedList();
+        $this->expectException(\OutOfBoundsException::class);
+        $list->removeItem(15);
+    }
+
+    /** @test */
+    public function  list_can_remove_given_item__at_first()
+    {
+        $list = new LinkedList();
+        $list->push(5);
+        $this->assertSame(5, $list->removeItem(5));
+        $this->assertCount(0, $list);
+    }
+
+    /** @test */
+    public function list_can_remove_given_item__at_last()
+    {
+        $list = new LinkedList();
+        $list->push(5);
+        $list->push(10);
+        $list->push(15);
+        $this->assertSame(15, $list->removeItem(15));
+        $this->assertCount(2, $list);
+    }
+
+    /** @test */
+    public function list_can_remove_search_item_and_remove_it()
+    {
+        $list = new LinkedList();
+        $list->push(5);
+        $list->push(10);
+        $list->push(15);
+        $this->assertSame(10, $list->removeItem(10));
+        // print_r($list);
+        $this->assertCount(2, $list);
     }
 }

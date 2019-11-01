@@ -5,13 +5,13 @@ namespace DataStructure\Abstracts;
 interface AbstractList
 {
     public function __construct($value);
-    public function empty($value);
+    public function empty(): bool;
     public function push($item);
     public function first();
     public function last();
-    public function add($index, $item);
-    public function get($index);
-    public function remove($index): bool;
+    public function add(int $index, $item);
+    public function get(int $index);
+    public function remove(int $index);
     public function pop();
-    public function removeItem($item): bool;
+    public function removeItem($item);
 }

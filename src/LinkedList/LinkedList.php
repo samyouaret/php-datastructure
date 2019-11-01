@@ -2,7 +2,9 @@
 
 namespace DataStructure\LinkedList;
 
-class LinkedList implements \Countable
+use DataStructure\Abstracts\AbstractList;
+
+class LinkedList implements \Countable, AbstractList
 {
     protected $length = 0;
     protected $first;
@@ -73,14 +75,14 @@ class LinkedList implements \Countable
         $this->length--;
     }
 
-    public function add($index, $value)
+    public function add(int $index, $value)
     {
         $this->ensureIndexIsInRange($index);
         //insert at last of list or in empty list
         if ($index == $this->count()) {
             return $this->push($value);
         }
-        // insert at first of list or
+        // insert at first of list
         if ($index == 0) {
             return $this->unshift($value);
         }
@@ -159,9 +161,9 @@ class LinkedList implements \Countable
         $this->ensureListNotEmpty();
         $toDelete = $this->first;
         $value =  $this->first->getValue();
-        try {
+        if ($this->first->hasNext()) {
             $this->first = $this->first->next();
-        } catch (\Throwable $th) {
+        } else {
             $this->first = null;
         }
         unset($toDelete);
@@ -172,5 +174,29 @@ class LinkedList implements \Countable
     public function pop()
     {
         return $this->remove($this->count() - 1);
+    }
+
+    public function removeItem($item)
+    {
+        $this->ensureListNotEmpty();
+        if ($this->first->getValue() == $item) {
+            return $this->shift();
+        }
+        $node = $this->first;
+        while ($node->hasNext()) {
+            if ($node->next()->getValue() == $item) {
+                $toDelete  = $node->next();
+                if ($toDelete->hasNext()) {
+                    $node->setNext($toDelete->next());
+                } else {
+                    $node->clearNext();
+                }
+                $value = $toDelete->getValue();
+                $this->decrement();
+                return $value;
+            }
+            $node = $node->next();
+        }
+        return false;
     }
 }
