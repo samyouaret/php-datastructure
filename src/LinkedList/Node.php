@@ -34,8 +34,17 @@ class Node implements AbstractNode
         $this->next = $node;
     }
 
+    public function clearNext()
+    {
+        unset($this->next);
+        $this->next = null;
+    }
+
     public function next(): AbstractNode
     {
+        if ($this->next === null) {
+            throw new \OutOfBoundsException('try to access undefined node');
+        }
         return $this->next;
     }
 

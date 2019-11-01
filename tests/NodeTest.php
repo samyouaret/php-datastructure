@@ -55,6 +55,14 @@ class NodeTest extends TestCase
     }
 
     /** @test */
+    public function clear_next_method()
+    {
+        $this->node->setNext(new Node);
+        $this->node->clearNext(new Node);
+        $this->assertFalse($this->node->hasNext());
+    }
+
+    /** @test */
     public function next_method()
     {
         $next  = new Node;
