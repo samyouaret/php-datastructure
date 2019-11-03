@@ -254,7 +254,7 @@ class DoublyLinkedListTest extends TestCase
         $list->push(20);
         $this->assertSame(10, $list->remove(1));
         $this->assertSame(20, $list->remove(2));
-        dump($list);
+        // dump($list);
         $this->assertSame(15, $list->remove(1));
         $this->assertSame(5, $list->remove(0));
         $this->assertCount(0, $list);
@@ -298,5 +298,21 @@ class DoublyLinkedListTest extends TestCase
         $this->assertSame(10, $list->removeItem(10));
         // print_r($list);
         $this->assertCount(2, $list);
+    }
+
+    /** @test */
+    public function list_can_be_iterated()
+    {
+        $list = new DoublyLinkedList();
+        $list->push(5);
+        $list->push(10);
+        $list->push(15);
+        $result = [];
+        foreach ($list as $key => $value) {
+            $result[$key] = $value;
+        }
+        dump($result);
+        $this->assertSame([5, 10, 15], $result);
+        $this->assertCount(3, $result);
     }
 }

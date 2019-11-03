@@ -4,17 +4,50 @@ namespace DataStructure\LinkedList;
 
 use DataStructure\Abstracts\AbstractList;
 
-class DoublyLinkedList implements \Countable, AbstractList
+class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 {
     protected $length = 0;
     protected $first;
     protected $last;
+    /**iterator variables */
+    protected $iterator_position;
+    protected $current;
 
     public function __construct($value = null)
     {
         if ($value) {
             $this->insertWhenEmpty($value);
         }
+        $this->rewind();
+    }
+
+    public function current()
+    {
+        return $this->current->getValue();
+    }
+
+    public function next()
+    {
+        if ($this->iterator_position < $this->count()) {
+            $this->iterator_position++;
+            $this->current = $this->current->next();
+        }
+    }
+
+    public function key()
+    {
+        return $this->iterator_position;
+    }
+
+    public function valid()
+    {
+        return $this->iterator_position < $this->length;
+    }
+
+    public function rewind()
+    {
+        $this->iterator_position = 0;
+        $this->current = $this->first;
     }
 
     public function count(): int
@@ -138,7 +171,7 @@ class DoublyLinkedList implements \Countable, AbstractList
         }
         return $this->removeAt($index);
     }
-    
+
     protected function removeAt(int $index)
     {
         $beforeNode  = $this->getNode($index - 1);
