@@ -12,6 +12,9 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     /**iterator variables */
     protected $iterator_position;
     protected $current;
+    const ITERATE_FORWARD = 0;
+    const ITERATE_REVERSE = 1;
+    protected $iterationMode = 0;
 
     public function __construct($value = null)
     {
@@ -30,7 +33,8 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     {
         if ($this->iterator_position < $this->count()) {
             $this->iterator_position++;
-            $this->current = $this->current->next();
+            $this->current = $this->iterationMode == self::ITERATE_FORWARD
+                ? $this->current->next() : $this->current->prev();
         }
     }
 
@@ -47,7 +51,16 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     public function rewind()
     {
         $this->iterator_position = 0;
-        $this->current = $this->first;
+        $this->current = $this->iterationMode == self::ITERATE_FORWARD
+            ? $this->first : $this->last;
+    }
+
+    public function setIterationMode(int $mode)
+    {
+        if ($mode !== self::ITERATE_FORWARD && $mode !== self::ITERATE_REVERSE) {
+            throw new \InvalidArgumentException("invalid iteration mode");
+        }
+        $this->iterationMode = $mode;
     }
 
     public function count(): int

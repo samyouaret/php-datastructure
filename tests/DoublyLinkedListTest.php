@@ -311,8 +311,23 @@ class DoublyLinkedListTest extends TestCase
         foreach ($list as $key => $value) {
             $result[$key] = $value;
         }
-        dump($result);
         $this->assertSame([5, 10, 15], $result);
+        $this->assertCount(3, $result);
+    }
+
+    /** @test */
+    public function list_can_be_iterated_in_reverse()
+    {
+        $list = new DoublyLinkedList();
+        $list->push(5);
+        $list->push(10);
+        $list->push(15);
+        $list->setIterationMode(DoublyLinkedList::ITERATE_REVERSE);
+        $result = [];
+        foreach ($list as $key => $value) {
+            $result[$key] = $value;
+        }
+        $this->assertSame([15, 10, 5], $result);
         $this->assertCount(3, $result);
     }
 }
