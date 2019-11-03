@@ -8,7 +8,7 @@ interface AbstractNode
     public function getValue();
     public function setValue($value);
     public function hasNext(): bool;
-    public function setNext(AbstractNode $node);
-    public function next(): AbstractNode;
+    public function setNext($node);
+    public function next();
     public function empty(): bool;
 }

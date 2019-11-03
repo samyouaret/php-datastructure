@@ -29,23 +29,27 @@ class Node implements AbstractNode
         return $this->next !== null;
     }
 
-    public function setNext(AbstractNode $node)
+    public function setNext($node)
     {
+        $this->ensureNodeType($node);
         $this->next = $node;
     }
 
     public function clearNext()
     {
-        unset($this->next);
         $this->next = null;
     }
 
-    public function next(): AbstractNode
+    public function next()
     {
-        if ($this->next === null) {
+        return $this->next;
+    }
+
+    public function ensureNodeType($node)
+    {
+        if ($this->next !== null && !$node instanceof self) {
             throw new \OutOfBoundsException('try to access undefined node');
         }
-        return $this->next;
     }
 
     public function empty(): bool
