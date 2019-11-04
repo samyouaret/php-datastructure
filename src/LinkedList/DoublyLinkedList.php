@@ -4,7 +4,7 @@ namespace DataStructure\LinkedList;
 
 use DataStructure\Abstracts\AbstractList;
 
-/** 
+/**
  * TODO :
  * clean code and make methods smaller
  * document and comment code

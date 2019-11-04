@@ -2,7 +2,6 @@
 
 namespace DataStructure\LinkedList;
 
-
 class DoublyNode extends Node
 {
     protected $prev;
