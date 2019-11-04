@@ -4,6 +4,15 @@ namespace DataStructure\LinkedList;
 
 use DataStructure\Abstracts\AbstractList;
 
+/** 
+ * TODO :
+ * clean code and make methods smaller
+ * document and comment code
+ * revise code
+ * publish to github
+ * implements array access
+ */
+
 class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 {
     protected $length = 0;
@@ -31,11 +40,9 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 
     public function next()
     {
-        if ($this->iterator_position < $this->count()) {
-            $this->iterator_position++;
-            $this->current = $this->iterationMode == self::ITERATE_FORWARD
-                ? $this->current->next() : $this->current->prev();
-        }
+        $this->iterator_position++;
+        $this->current = $this->iterationMode == self::ITERATE_FORWARD
+            ? $this->current->next() : $this->current->prev();
     }
 
     public function key()
@@ -61,6 +68,11 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
             throw new \InvalidArgumentException("invalid iteration mode");
         }
         $this->iterationMode = $mode;
+    }
+
+    public function getIterationMode()
+    {
+        return $this->iterationMode;
     }
 
     public function count(): int
@@ -128,11 +140,6 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         $node->setNext($this->first);
         $this->first = $node;
         $this->increment();
-    }
-
-    public function lastNode()
-    {
-        return $this->last;
     }
 
     protected function insertAtLast($value)
@@ -277,14 +284,5 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     protected function decrement()
     {
         $this->length--;
-    }
-
-    public function print()
-    {
-        $node = $this->first;
-        while ($node !== null) {
-            echo $node->getValue() . "\n";
-            $node = $node->next();
-        }
     }
 }

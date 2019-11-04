@@ -8,6 +8,14 @@ use DataStructure\LinkedList\DoublyLinkedList;
 
 class DoublyLinkedListTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        $this->list = new DoublyLinkedList();
+        $this->list->push(5);
+        $this->list->push(10);
+        $this->list->push(15);
+    }
+
     /** @test */
     public function linked_list_is_instance_of_countable()
     {
@@ -41,25 +49,17 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function push_method()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
-        $this->assertCount(3, $list);
-        $this->assertSame(15, $list->last());
+        $this->assertCount(3, $this->list);
+        $this->assertSame(15, $this->list->last());
     }
 
     /** @test */
     public function get_node_at_given_index()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
-        $list->push(17);
-        $this->assertSame(5, $list->getNode(0)->getValue());
-        $this->assertSame(10, $list->getNode(1)->getValue());
-        $this->assertSame(15, $list->getNode(2)->getValue());
+        $this->list->push(17);
+        $this->assertSame(5, $this->list->getNode(0)->getValue());
+        $this->assertSame(10, $this->list->getNode(1)->getValue());
+        $this->assertSame(15, $this->list->getNode(2)->getValue());
     }
 
     /** @test */
@@ -86,10 +86,7 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function first_method()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $this->assertSame(5, $list->first());
+        $this->assertSame(5, $this->list->first());
     }
 
     /** @test */
@@ -103,10 +100,7 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function last_method()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $this->assertSame(10, $list->last());
+        $this->assertSame(15, $this->list->last());
     }
 
     /** @test */
@@ -176,25 +170,20 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function list_can_remove_last_item_with_pop_method()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
         // dump($list);
-        $list->print();
-        $this->assertSame(10, $list->pop());
-        $this->assertSame(5, $list->pop());
-        $this->assertCount(0, $list);
+        $this->assertSame(15, $this->list->pop());
+        $this->assertSame(10, $this->list->pop());
+        $this->assertSame(5, $this->list->pop());
+        $this->assertCount(0, $this->list);
     }
 
     /** @test */
     public function list_can_remove_last_item_with_shift_method()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $this->assertSame(5, $list->shift());
-        $this->assertSame(10, $list->shift());
-        $this->assertCount(0, $list);
+        $this->assertSame(5, $this->list->shift());
+        $this->assertSame(10, $this->list->shift());
+        $this->assertSame(15, $this->list->shift());
+        $this->assertCount(0, $this->list);
     }
 
     /** @test */
@@ -208,21 +197,15 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function remove_method_raise_exception_when_index_out_of_bound()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
         $this->expectException(\OutOfBoundsException::class);
-        $list->remove(3);
+        $this->list->remove(3);
     }
 
     /** @test */
     public function list_can_remove_first_item()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $this->assertSame(5, $list->remove(0));
-        $this->assertCount(1, $list);
+        $this->assertSame(5, $this->list->remove(0));
+        $this->assertCount(2, $this->list);
     }
 
     /** @test */
@@ -237,27 +220,20 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function list_can_remove_last_item()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $this->assertSame(10, $list->remove(1));
-        $this->assertCount(1, $list);
+        $this->assertSame(15, $this->list->remove(2));
+        $this->assertCount(2, $this->list);
     }
 
     /** @test */
     public function list_can_remove_item_at_given_index()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
-        $list->push(20);
-        $this->assertSame(10, $list->remove(1));
-        $this->assertSame(20, $list->remove(2));
-        // dump($list);
-        $this->assertSame(15, $list->remove(1));
-        $this->assertSame(5, $list->remove(0));
-        $this->assertCount(0, $list);
+        $this->list->push(20);
+        $this->assertSame(10, $this->list->remove(1));
+        $this->assertSame(20, $this->list->remove(2));
+        // dump($this->list);
+        $this->assertSame(15, $this->list->remove(1));
+        $this->assertSame(5, $this->list->remove(0));
+        $this->assertCount(0, $this->list);
     }
 
     /** @test */
@@ -269,7 +245,7 @@ class DoublyLinkedListTest extends TestCase
     }
 
     /** @test */
-    public function  list_can_remove_given_item__at_first()
+    public function  list_can_remove_given_item_at_first()
     {
         $list = new DoublyLinkedList();
         $list->push(5);
@@ -280,35 +256,22 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function list_can_remove_given_item_at_last()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
-        $this->assertSame(15, $list->removeItem(15));
-        $this->assertCount(2, $list);
+        $this->assertSame(15, $this->list->removeItem(15));
+        $this->assertCount(2, $this->list);
     }
 
     /** @test */
     public function list_can_remove_search_item_and_remove_it()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
-        $this->assertSame(10, $list->removeItem(10));
-        // print_r($list);
-        $this->assertCount(2, $list);
+        $this->assertSame(10, $this->list->removeItem(10));
+        $this->assertCount(2, $this->list);
     }
 
     /** @test */
     public function list_can_be_iterated()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
         $result = [];
-        foreach ($list as $key => $value) {
+        foreach ($this->list as $key => $value) {
             $result[$key] = $value;
         }
         $this->assertSame([5, 10, 15], $result);
@@ -316,15 +279,19 @@ class DoublyLinkedListTest extends TestCase
     }
 
     /** @test */
+    public function set_iteration_mode()
+    {
+        $this->assertSame(DoublyLinkedList::ITERATE_FORWARD, $this->list->getIterationMode());
+        $this->list->setIterationMode(DoublyLinkedList::ITERATE_REVERSE);
+        $this->assertSame(DoublyLinkedList::ITERATE_REVERSE, $this->list->getIterationMode());
+    }
+
+    /** @test */
     public function list_can_be_iterated_in_reverse()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $list->push(10);
-        $list->push(15);
-        $list->setIterationMode(DoublyLinkedList::ITERATE_REVERSE);
+        $this->list->setIterationMode(DoublyLinkedList::ITERATE_REVERSE);
         $result = [];
-        foreach ($list as $key => $value) {
+        foreach ($this->list as $key => $value) {
             $result[$key] = $value;
         }
         $this->assertSame([15, 10, 5], $result);
