@@ -64,10 +64,15 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 
     public function setIterationMode(int $mode)
     {
+        $this->ensureValidIterationMode($mode);
+        $this->iterationMode = $mode;
+    }
+
+    public function ensureValidIterationMode(int $mode)
+    {
         if ($mode !== self::ITERATE_FORWARD && $mode !== self::ITERATE_REVERSE) {
             throw new \InvalidArgumentException("invalid iteration mode");
         }
-        $this->iterationMode = $mode;
     }
 
     public function getIterationMode()
