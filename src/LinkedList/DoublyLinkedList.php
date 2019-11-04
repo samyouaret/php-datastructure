@@ -124,11 +124,16 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
             return $this->push($value);
         }
         // insert at first of list
-        if ($index == 0) {
+        if ($this->isFirstIndex($index)) {
             return $this->unshift($value);
         }
         // insert at other indexes
         $this->insertAt($index, $value);
+    }
+
+    public function isFirstIndex(int $index)
+    {
+        return $index == 0;
     }
 
     protected function insertAt(int $index, $value)
@@ -237,7 +242,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     {
         $this->ensureListNotEmpty();
         $this->ensureIndexIsInRangeForRemove($index);
-        if ($index == 0) {
+        if ($this->isFirstIndex($index)) {
             return $this->shift();
         }
         if ($this->isLastIndex($index)) {
