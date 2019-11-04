@@ -4,15 +4,6 @@ namespace DataStructure\LinkedList;
 
 use DataStructure\Abstracts\AbstractList;
 
-/**
- * TODO :
- * clean code and make methods smaller
- * document and comment code
- * revise code
- * publish to github
- * implements array access
- */
-
 class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 {
     protected $length = 0;
@@ -20,6 +11,11 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     protected $last;
     /**iterator variables */
     protected $iterator_position;
+    /**
+     * The node that hold the current node for iterator.
+     *
+     * @var DoublyNode
+     */
     protected $current;
     const ITERATE_FORWARD = 0;
     const ITERATE_REVERSE = 1;
@@ -40,7 +36,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 
     public function next()
     {
-        $this->iterator_position++;
+        ++$this->iterator_position;
         $this->current = $this->iterationMode == self::ITERATE_FORWARD
             ? $this->current->next() : $this->current->prev();
     }
@@ -71,7 +67,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     public function ensureValidIterationMode(int $mode)
     {
         if ($mode !== self::ITERATE_FORWARD && $mode !== self::ITERATE_REVERSE) {
-            throw new \InvalidArgumentException("invalid iteration mode");
+            throw new \InvalidArgumentException('invalid iteration mode');
         }
     }
 
@@ -89,18 +85,37 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     {
         return $this->length == 0;
     }
+
+    /**
+     * return first element of list.
+     *
+     * @return mixed
+     */
     public function first()
     {
         $this->ensureListNotEmpty();
+
         return $this->first->getValue();
     }
 
+    /**
+     * return last element of list.
+     *
+     * @return mixed
+     */
     public function last()
     {
         $this->ensureListNotEmpty();
+
         return $this->last->getValue();
     }
 
+    /**
+     * add an element to list at given index.
+     *
+     * @param int   $index
+     * @param mixed $value
+     */
     public function add(int $index, $value)
     {
         $this->ensureIndexIsInRange($index);
@@ -127,6 +142,11 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         $this->increment();
     }
 
+    /**
+     * push an element to the list.
+     *
+     * @param mixed $value
+     */
     public function push($value)
     {
         if ($this->empty()) {
@@ -135,6 +155,11 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         $this->insertAtLast($value);
     }
 
+    /**
+     * add element to first of the list.
+     *
+     * @param mixed $value
+     */
     public function unshift($value)
     {
         if ($this->empty()) {
@@ -144,6 +169,12 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         $this->first->setPrev($node);
         $node->setNext($this->first);
         $this->first = $node;
+        $this->increment();
+    }
+
+    protected function insertWhenEmpty($value)
+    {
+        $this->first = $this->last = new DoublyNode($value);
         $this->increment();
     }
 
@@ -157,33 +188,51 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         $this->increment();
     }
 
-    protected function insertWhenEmpty($value)
-    {
-        $this->first = $this->last = new DoublyNode($value);
-        $this->increment();
-    }
-
+    /**
+     * get an element from list at given index.
+     *
+     * @param int $index
+     *
+     * @return mixed
+     */
     public function get(int $index)
     {
         return $this->getNode($index)->getValue();
     }
 
+    /**
+     * get an node from list at given index.
+     *
+     * @param int   $index
+     * @param mixed $value
+     *
+     * @return DoublyNode
+     */
     public function getNode(int $index): DoublyNode
     {
         $this->ensureListNotEmpty();
         $this->ensureIndexIsInRange($index);
-        if ($index == $this->count() - 1) {
+        // target node is the last node
+        if ($this->isLastIndex($index)) {
             return $this->last;
         }
         $node = $this->first;
         $i = 0;
         while ($node->hasNext() && $i < $index) {
             $node = $node->next();
-            $i++;
+            ++$i;
         }
+
         return $node;
     }
 
+    /**
+     * remove an element from list at given index.
+     *
+     * @param int $index
+     *
+     * @return mixed
+     */
     public function remove(int $index)
     {
         $this->ensureListNotEmpty();
@@ -191,56 +240,88 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         if ($index == 0) {
             return $this->shift();
         }
-        if ($index == $this->count() - 1) {
+        if ($this->isLastIndex($index)) {
             return $this->pop();
         }
+
         return $this->removeAt($index);
+    }
+
+    public function isLastIndex(int $index)
+    {
+        return $index == $this->count() - 1;
     }
 
     protected function removeAt(int $index)
     {
-        $beforeNode  = $this->getNode($index - 1);
+        $beforeNode = $this->getNode($index - 1);
         $value = $beforeNode->next()->getValue();
         if ($beforeNode->next()->hasNext()) {
             $beforeNode->next()->next()->setPrev($beforeNode);
         }
         $beforeNode->setNext($beforeNode->next()->next());
         $this->decrement();
+
         return $value;
     }
 
+    /**
+     * remove last element from list.
+     *
+     * @return mixed
+     */
     public function pop()
     {
         $this->ensureListNotEmpty();
-        $value  = $this->last->getValue();
+        $value = $this->last->getValue();
         if ($this->count() == 1) {
-            $this->first = $this->last = null;
+            $this->clearHeads();
         } else {
             $this->last->prev()->clearNext();
             $this->last = $this->last->prev();
         }
         $this->decrement();
+
         return $value;
     }
 
+    /**
+     * remove first element from list.
+     *
+     * @param int $index
+     */
     public function shift()
     {
         $this->ensureListNotEmpty();
-        $value =  $this->first->getValue();
+        $value = $this->first->getValue();
         if ($this->count() == 1) {
-            $this->first = $this->last = null;
+            $this->clearHeads();
         } else {
             $this->first = $this->first->next();
             $this->first->clearPrev();
         }
         $this->decrement();
+
         return $value;
     }
 
+    protected function clearHeads()
+    {
+        $this->first = $this->last = null;
+    }
+
+    /**
+     * remove an element from list based on given value of item.
+     *
+     * @param mixed $item
+     *
+     * @return mixed
+     */
     public function removeItem($item)
     {
         $this->ensureListNotEmpty();
-        $compare = is_callable($item) ? $item : self::class . '::compareItem';
+        $compare = is_callable($item) ? $item : self::class.'::compareItem';
+        //item is at first of list
         if ($compare($this->first->getValue(), $item)) {
             return $this->shift();
         }
@@ -248,19 +329,21 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         while ($node->hasNext()) {
             $value = $node->next()->getValue();
             if ($compare($value, $item)) {
-                // next of node is not last item in last
+                // check wether next of node is not last item in list
                 if ($node->next()->hasNext()) {
                     $node->next()->next()->setPrev($node);
                 } else {
-                    // remove last
+                    // update last
                     $this->last = $node;
                 }
                 $node->setNext($node->next()->next());
                 $this->decrement();
+
                 return $value;
             }
             $node = $node->next();
         }
+
         return false;
     }
 
@@ -292,11 +375,11 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
 
     protected function increment()
     {
-        $this->length++;
+        ++$this->length;
     }
 
     protected function decrement()
     {
-        $this->length--;
+        --$this->length;
     }
 }
