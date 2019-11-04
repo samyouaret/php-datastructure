@@ -47,8 +47,8 @@ class Node implements AbstractNode
 
     public function ensureNodeType($node)
     {
-        if ($this->next !== null && !$node instanceof self) {
-            throw new \OutOfBoundsException('try to access undefined node');
+        if ($node !== null && !$node instanceof self) {
+            throw new \InvalidArgumentException('wrong node passed node expect ' . static::class);
         }
     }
 

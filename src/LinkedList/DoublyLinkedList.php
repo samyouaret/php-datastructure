@@ -231,6 +231,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
             $this->first = $this->last = null;
         } else {
             $this->first = $this->first->next();
+            $this->first->clearPrev();
         }
         $this->decrement();
         return $value;
@@ -239,25 +240,33 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
     public function removeItem($item)
     {
         $this->ensureListNotEmpty();
-        if ($this->first->getValue() == $item) {
+        $compare = is_callable($item) ? $item : self::class . '::compareItem';
+        if ($compare($this->first->getValue(), $item)) {
             return $this->shift();
         }
         $node = $this->first;
         while ($node->hasNext()) {
-            if ($node->next()->getValue() == $item) {
-                $toDelete  = $node->next();
-                if ($toDelete->hasNext()) {
-                    $node->setNext($toDelete->next());
+            $value = $node->next()->getValue();
+            if ($compare($value, $item)) {
+                // next of node is not last item in last
+                if ($node->next()->hasNext()) {
+                    $node->next()->next()->setPrev($node);
                 } else {
-                    $node->clearNext();
+                    // remove last
+                    $this->last = $node;
                 }
-                $value = $toDelete->getValue();
+                $node->setNext($node->next()->next());
                 $this->decrement();
                 return $value;
             }
             $node = $node->next();
         }
         return false;
+    }
+
+    public function compareItem($value, $item)
+    {
+        return $item === $value;
     }
 
     protected function ensureIndexIsInRange($index)

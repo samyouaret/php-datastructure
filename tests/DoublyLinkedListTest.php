@@ -247,16 +247,16 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function  list_can_remove_given_item_at_first()
     {
-        $list = new DoublyLinkedList();
-        $list->push(5);
-        $this->assertSame(5, $list->removeItem(5));
-        $this->assertCount(0, $list);
+        $this->assertSame(5, $this->list->removeItem(5));
+        $this->assertSame(10, $this->list->first(5));
+        $this->assertCount(2, $this->list);
     }
 
     /** @test */
     public function list_can_remove_given_item_at_last()
     {
         $this->assertSame(15, $this->list->removeItem(15));
+        $this->assertSame(10, $this->list->last());
         $this->assertCount(2, $this->list);
     }
 
@@ -265,6 +265,18 @@ class DoublyLinkedListTest extends TestCase
     {
         $this->assertSame(10, $this->list->removeItem(10));
         $this->assertCount(2, $this->list);
+    }
+
+    /** @test */
+    public function list_can_remove_search_item_using_callback_and_remove_it()
+    {
+        $list = new DoublyLinkedList('adem');
+        $list->push('james');
+        $list->push('yahya');
+        $this->assertSame('james', $list->removeItem(function ($item) {
+            return substr($item, 0, 3) == 'jam';
+        }));
+        $this->assertCount(2, $list);
     }
 
     /** @test */
