@@ -4,21 +4,11 @@ namespace DataStructure\LinkedList;
 
 use DataStructure\Abstracts\AbstractList;
 
-class DoublyLinkedList implements \Countable, AbstractList, \Iterator
+class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
 {
     protected $length = 0;
     protected $first;
     protected $last;
-    /**iterator variables */
-    protected $iterator_position;
-    /**
-     * The node that hold the current node for iterator.
-     *
-     * @var DoublyNode
-     */
-    protected $current;
-    const ITERATE_FORWARD = 0;
-    const ITERATE_REVERSE = 1;
     protected $iterationMode = 0;
 
     public function __construct($value = null)
@@ -26,49 +16,17 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
         if ($value) {
             $this->insertWhenEmpty($value);
         }
-        $this->rewind();
-    }
-
-    public function current()
-    {
-        return $this->current->getValue();
-    }
-
-    public function next()
-    {
-        ++$this->iterator_position;
-        $this->current = $this->iterationMode == self::ITERATE_FORWARD
-            ? $this->current->next() : $this->current->prev();
-    }
-
-    public function key()
-    {
-        return $this->iterator_position;
-    }
-
-    public function valid()
-    {
-        return $this->iterator_position < $this->length;
-    }
-
-    public function rewind()
-    {
-        $this->iterator_position = 0;
-        $this->current = $this->iterationMode == self::ITERATE_FORWARD
-            ? $this->first : $this->last;
     }
 
     public function setIterationMode(int $mode)
     {
-        $this->ensureValidIterationMode($mode);
+        DoublyLinkedListIterator::ensureValidIterationMode($mode);
         $this->iterationMode = $mode;
     }
 
-    public function ensureValidIterationMode(int $mode)
+    public function getIterator()
     {
-        if ($mode !== self::ITERATE_FORWARD && $mode !== self::ITERATE_REVERSE) {
-            throw new \InvalidArgumentException('invalid iteration mode');
-        }
+        return new DoublyLinkedListIterator($this);
     }
 
     public function getIterationMode()
@@ -93,9 +51,14 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
      */
     public function first()
     {
+        return $this->firstNode()->getValue();
+    }
+
+    public function firstNode()
+    {
         $this->ensureListNotEmpty();
 
-        return $this->first->getValue();
+        return $this->first;
     }
 
     /**
@@ -105,9 +68,14 @@ class DoublyLinkedList implements \Countable, AbstractList, \Iterator
      */
     public function last()
     {
+        return $this->lastNode()->getValue();
+    }
+
+    public function lastNode()
+    {
         $this->ensureListNotEmpty();
 
-        return $this->last->getValue();
+        return $this->last;
     }
 
     /**

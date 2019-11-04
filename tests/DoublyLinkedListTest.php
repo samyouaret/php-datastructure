@@ -3,8 +3,8 @@
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-
 use DataStructure\LinkedList\DoublyLinkedList;
+use DataStructure\LinkedList\DoublyLinkedListIterator;
 
 class DoublyLinkedListTest extends TestCase
 {
@@ -245,7 +245,7 @@ class DoublyLinkedListTest extends TestCase
     }
 
     /** @test */
-    public function  list_can_remove_given_item_at_first()
+    public function list_can_remove_given_item_at_first()
     {
         $this->assertSame(5, $this->list->removeItem(5));
         $this->assertSame(10, $this->list->first(5));
@@ -293,20 +293,32 @@ class DoublyLinkedListTest extends TestCase
     /** @test */
     public function set_iteration_mode()
     {
-        $this->assertSame(DoublyLinkedList::ITERATE_FORWARD, $this->list->getIterationMode());
-        $this->list->setIterationMode(DoublyLinkedList::ITERATE_REVERSE);
-        $this->assertSame(DoublyLinkedList::ITERATE_REVERSE, $this->list->getIterationMode());
+        $this->assertSame(DoublyLinkedListIterator::ITERATE_FORWARD, $this->list->getIterationMode());
+        $this->list->setIterationMode(DoublyLinkedListIterator::ITERATE_REVERSE);
+        $this->assertSame(DoublyLinkedListIterator::ITERATE_REVERSE, $this->list->getIterationMode());
     }
 
     /** @test */
     public function list_can_be_iterated_in_reverse()
     {
-        $this->list->setIterationMode(DoublyLinkedList::ITERATE_REVERSE);
+        $this->list->setIterationMode(DoublyLinkedListIterator::ITERATE_REVERSE);
         $result = [];
-        foreach ($this->list as $key => $value) {
-            $result[$key] = $value;
+        foreach ($this->list as $value) {
+            $result[] = $value;
         }
         $this->assertSame([15, 10, 5], $result);
+        $this->assertCount(3, $result);
+    }
+
+    /** @test */
+    public function list_can_be_iterated_in_using_iterator_object()
+    {
+        $result = [];
+        $iterator = $this->list->getIterator();
+        foreach ($iterator as $value) {
+            $result[] = $value;
+        }
+        $this->assertSame([5, 10, 15], $result);
         $this->assertCount(3, $result);
     }
 }

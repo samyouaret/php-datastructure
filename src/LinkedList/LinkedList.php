@@ -29,12 +29,14 @@ class LinkedList implements \Countable, AbstractList
     public function first()
     {
         $this->ensureListNotEmpty();
+
         return $this->first->getValue();
     }
 
     public function last()
     {
         $this->ensureListNotEmpty();
+
         return $this->lastNode()->getValue();
     }
 
@@ -48,8 +50,7 @@ class LinkedList implements \Countable, AbstractList
     public function push($value)
     {
         if ($this->empty()) {
-            $this->insertWhenEmpty($value);
-            return;
+           return $this->insertWhenEmpty($value);
         }
         $this->insertAtLast($value);
     }
@@ -67,12 +68,12 @@ class LinkedList implements \Countable, AbstractList
 
     protected function increment()
     {
-        $this->length++;
+        ++$this->length;
     }
 
     protected function decrement()
     {
-        $this->length--;
+        --$this->length;
     }
 
     public function add(int $index, $value)
@@ -104,7 +105,7 @@ class LinkedList implements \Countable, AbstractList
     public function unshift($value)
     {
         if ($this->empty()) {
-            $this->insertWhenEmpty($value);
+            return $this->insertWhenEmpty($value);
         }
         $node = new Node($value);
         $node->setNext($this->first);
@@ -131,8 +132,9 @@ class LinkedList implements \Countable, AbstractList
         $i = 0;
         while ($node->hasNext() && $i < $index) {
             $node = $node->next();
-            $i++;
+            ++$i;
         }
+
         return $node;
     }
 
@@ -143,16 +145,13 @@ class LinkedList implements \Countable, AbstractList
         if ($index == 0) {
             return $this->shift();
         }
-        $node  = $this->getNode($index - 1);
+        $node = $this->getNode($index - 1);
         $toDelete = $node->next();
-        if ($toDelete->hasNext()) {
-            $node->setNext($toDelete->next());
-        } else {
-            $node->clearNext();
-        }
+        $node->setNext($toDelete->next());
         $value = $toDelete->getValue();
         $this->decrement();
         unset($toDelete);
+
         return $value;
     }
 
@@ -160,14 +159,11 @@ class LinkedList implements \Countable, AbstractList
     {
         $this->ensureListNotEmpty();
         $toDelete = $this->first;
-        $value =  $this->first->getValue();
-        if ($this->first->hasNext()) {
-            $this->first = $this->first->next();
-        } else {
-            $this->first = null;
-        }
+        $value = $this->first->getValue();
+        $this->first = $this->first->next();
         unset($toDelete);
         $this->decrement();
+
         return $value;
     }
 
@@ -185,18 +181,16 @@ class LinkedList implements \Countable, AbstractList
         $node = $this->first;
         while ($node->hasNext()) {
             if ($node->next()->getValue() == $item) {
-                $toDelete  = $node->next();
-                if ($toDelete->hasNext()) {
-                    $node->setNext($toDelete->next());
-                } else {
-                    $node->clearNext();
-                }
+                $toDelete = $node->next();
+                $node->setNext($toDelete->next());
                 $value = $toDelete->getValue();
                 $this->decrement();
+
                 return $value;
             }
             $node = $node->next();
         }
+
         return false;
     }
 }
