@@ -51,13 +51,12 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
      */
     public function first()
     {
+        $this->ensureListNotEmpty();
         return $this->firstNode()->getValue();
     }
 
     public function firstNode()
     {
-        $this->ensureListNotEmpty();
-
         return $this->first;
     }
 
@@ -68,13 +67,12 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
      */
     public function last()
     {
+        $this->ensureListNotEmpty();
         return $this->lastNode()->getValue();
     }
 
     public function lastNode()
     {
-        $this->ensureListNotEmpty();
-
         return $this->last;
     }
 
@@ -276,6 +274,12 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
         $this->decrement();
 
         return $value;
+    }
+
+    public function clear()
+    {
+        $this->clearHeads();
+        $this->length = 0;
     }
 
     protected function clearHeads()

@@ -21,4 +21,9 @@ class Queue extends DoublyLinkedList implements AbstractQueue
     {
         return $this->shift();
     }
+
+    public function peek()
+    {
+        return $this->first();
+    }
 }

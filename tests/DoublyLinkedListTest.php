@@ -395,4 +395,12 @@ class DoublyLinkedListTest extends TestCase
         $this->list->mergeWith($list);
         $this->assertSame([5, 10, 15, 30, 40, 50], $this->list->toArray());
     }
+
+    /** @test */
+    public function clear_list()
+    {
+        $this->list->clear();
+        $this->assertCount(0, $this->list);
+        $this->assertSame([], $this->list->toArray());
+    }
 }

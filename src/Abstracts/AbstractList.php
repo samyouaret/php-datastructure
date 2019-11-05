@@ -14,4 +14,6 @@ interface AbstractList
     public function remove(int $index);
     public function pop();
     public function removeItem($item);
+    public function search($item);
+    public function clear();
 }

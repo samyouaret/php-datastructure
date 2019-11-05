@@ -24,12 +24,13 @@ class QueueTest extends TestCase
     /** @test */
     public function queue_adding_items_with_fifo_mode()
     {
-        $this->assertSame(5, $this->queue->first());
+        $this->assertSame(5, $this->queue->peek());
     }
 
     /** @test */
     public function queue_remove_items_with_fifo_mode()
     {
         $this->assertSame(5, $this->queue->dequeue());
+        $this->assertCount(1, $this->queue);
     }
 }
