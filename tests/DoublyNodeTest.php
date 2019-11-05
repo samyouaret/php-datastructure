@@ -15,13 +15,6 @@ class DoublyNodeTest extends TestCase
     }
 
     /** @test */
-    public function node_is_a_node_instance()
-    {
-        $node = new DoublyNode(5);
-        $this->assertInstanceOf(Node::class, $node);
-    }
-
-    /** @test */
     public function has_prev_method()
     {
         $this->assertFalse($this->node->hasPrev());
