@@ -9,7 +9,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
     protected $length = 0;
     protected $first;
     protected $last;
-    protected $iterationMode = 0;
+    protected $iterationMode = DoublyLinkedListIterator::ITERATE_FORWARD;
 
     public function __construct($value = null)
     {
@@ -293,7 +293,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
     public function removeItem($item)
     {
         $this->ensureListNotEmpty();
-        $compare = is_callable($item) ? $item : self::class.'::compareItem';
+        $compare = is_callable($item) ? $item : self::class . '::compareItem';
         //item is at first of list
         if ($compare($this->first->getValue(), $item)) {
             return $this->shift();

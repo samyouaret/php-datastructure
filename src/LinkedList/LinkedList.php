@@ -8,6 +8,7 @@ class LinkedList implements \Countable, AbstractList
 {
     protected $length = 0;
     protected $first;
+    protected $last;
 
     public function __construct($value = null)
     {
@@ -40,42 +41,6 @@ class LinkedList implements \Countable, AbstractList
         return $this->lastNode()->getValue();
     }
 
-    protected function ensureListNotEmpty()
-    {
-        if ($this->first === null) {
-            throw new \OutOfBoundsException('try to perform action on an empty list');
-        }
-    }
-
-    public function push($value)
-    {
-        if ($this->empty()) {
-           return $this->insertWhenEmpty($value);
-        }
-        $this->insertAtLast($value);
-    }
-
-    protected function lastNode()
-    {
-        return $this->getNode($this->count());
-    }
-
-    protected function insertWhenEmpty($value)
-    {
-        $this->first = new Node($value);
-        $this->increment();
-    }
-
-    protected function increment()
-    {
-        ++$this->length;
-    }
-
-    protected function decrement()
-    {
-        --$this->length;
-    }
-
     public function add(int $index, $value)
     {
         $this->ensureIndexIsInRange($index);
@@ -95,13 +60,6 @@ class LinkedList implements \Countable, AbstractList
         $this->increment();
     }
 
-    protected function ensureIndexIsInRange($index)
-    {
-        if ($index > $this->count()) {
-            throw new \OutOfBoundsException('given index is out of range of list');
-        }
-    }
-
     public function unshift($value)
     {
         if ($this->empty()) {
@@ -118,6 +76,25 @@ class LinkedList implements \Countable, AbstractList
         $last = $this->lastNode();
         $last->setNext(new Node($value));
         $this->increment();
+    }
+
+    public function push($value)
+    {
+        if ($this->empty()) {
+            return $this->insertWhenEmpty($value);
+        }
+        $this->insertAtLast($value);
+    }
+
+    protected function insertWhenEmpty($value)
+    {
+        $this->first = new Node($value);
+        $this->increment();
+    }
+
+    public function lastNode()
+    {
+        return $this->getNode($this->count());
     }
 
     public function get(int $index)
@@ -155,23 +132,6 @@ class LinkedList implements \Countable, AbstractList
         return $value;
     }
 
-    public function shift()
-    {
-        $this->ensureListNotEmpty();
-        $toDelete = $this->first;
-        $value = $this->first->getValue();
-        $this->first = $this->first->next();
-        unset($toDelete);
-        $this->decrement();
-
-        return $value;
-    }
-
-    public function pop()
-    {
-        return $this->remove($this->count() - 1);
-    }
-
     public function removeItem($item)
     {
         $this->ensureListNotEmpty();
@@ -192,5 +152,46 @@ class LinkedList implements \Countable, AbstractList
         }
 
         return false;
+    }
+
+    public function shift()
+    {
+        $this->ensureListNotEmpty();
+        $toDelete = $this->first;
+        $value = $this->first->getValue();
+        $this->first = $this->first->next();
+        unset($toDelete);
+        $this->decrement();
+
+        return $value;
+    }
+
+    public function pop()
+    {
+        return $this->remove($this->count() - 1);
+    }
+
+    protected function ensureListNotEmpty()
+    {
+        if ($this->first === null) {
+            throw new \OutOfBoundsException('try to perform action on an empty list');
+        }
+    }
+
+    protected function ensureIndexIsInRange($index)
+    {
+        if ($index > $this->count()) {
+            throw new \OutOfBoundsException('given index is out of range of list');
+        }
+    }
+
+    protected function increment()
+    {
+        ++$this->length;
+    }
+
+    protected function decrement()
+    {
+        --$this->length;
     }
 }
