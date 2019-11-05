@@ -2,8 +2,7 @@ PHP data structure package
 ==========================
 
 This package was not intended to replace the data structure provided by standard PHP library
-(**SPL**) , this is package created just for teaching and teaching purposes and contains the
-implementation details to basic operations performed by legacy data structure like linked lists providing classes like DoublyLinkedList, Stack and Queue to achieve desired tasks.
+(**SPL**) , this is package created just for demonstration and teaching purposes and contains the implementation details to basic operations performed by legacy data structure like linked lists providing classes like DoublyLinkedList, Stack and Queue to achieve desired tasks.
 
 
 Requirements
@@ -53,7 +52,7 @@ create instance of ``DoublyLinkedList`` and push to it :
     public function removeItem($item); //search and remove item return it,accepts callback compare     
     public function search($item); //search and item return it,accepts callback compare     
     public function clear(); //clear all items of list
-    
+
 ```
 
 ``Stack`` is a child of ``DoublyLinkedList` and provide alias to last method as top of list :
