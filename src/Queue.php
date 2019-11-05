@@ -7,7 +7,6 @@ use DataStructure\LinkedList\DoublyLinkedList;
 
 class Queue extends DoublyLinkedList implements AbstractQueue
 {
-
     public function __construct($value = null)
     {
         parent::__construct($value);

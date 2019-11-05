@@ -8,7 +8,6 @@ use DataStructure\LinkedList\DoublyNode;
 
 class DoublyNodeTest extends TestCase
 {
-
     protected function setUp(): void
     {
         $this->node = new DoublyNode();

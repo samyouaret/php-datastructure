@@ -1,1 +1,1 @@
-# PHP data strecture package
+# PHP data structure package

@@ -280,6 +280,18 @@ class DoublyLinkedListTest extends TestCase
     }
 
     /** @test */
+    public function list_can_remove_search_item()
+    {
+        $list = new DoublyLinkedList('adem');
+        $list->push('james');
+        $list->push('yahya');
+        $this->assertTrue($list->search('yahya'));
+        $this->assertTrue($list->search(function ($item) {
+            return substr($item, 0, 3) == 'jam';
+        }));
+    }
+
+    /** @test */
     public function list_can_be_iterated()
     {
         $result = [];
@@ -320,5 +332,67 @@ class DoublyLinkedListTest extends TestCase
         }
         $this->assertSame([5, 10, 15], $result);
         $this->assertCount(3, $result);
+    }
+
+    /** @test */
+    public function list_can_be_iterated_in_using_each_method()
+    {
+        $result = [];
+        $this->list->each(function ($item) use (&$result) {
+            $result[] = $item;
+        });
+        $this->assertSame([5, 10, 15], $result);
+        $this->assertCount(3, $result);
+    }
+
+    /** @test */
+    public function list_can_be_converted_to_array()
+    {
+        $this->assertSame([5, 10, 15], $this->list->toArray());
+    }
+
+    /** @test */
+    public function list_can_be_reversed()
+    {
+        $reversedList = $this->list->reverse();
+        $this->assertSame([15, 10, 5], $reversedList->toArray());
+    }
+
+    /** @test */
+    public function list_can_create_new_list_using_map_method()
+    {
+        $list = $this->list->map(function ($item) {
+            return $item + 5;
+        });
+        $this->assertSame([10, 15, 20], $list->toArray());
+    }
+
+    /** @test */
+    public function list_can_filter_items_and_return_new_list_using_filter_method()
+    {
+        $list = $this->list->filter(function ($item) {
+            return $item > 5;
+        });
+        $this->assertSame([10, 15], $list->toArray());
+    }
+
+    /** @test */
+    public function list_can_be_merged_with_another_list()
+    {
+        $list = new DoublyLinkedList(30);
+        $list->push(40);
+        $list->push(50);
+        $mergedList = $this->list->merge($list);
+        $this->assertSame([5, 10, 15, 30, 40, 50], $mergedList->toArray());
+    }
+
+    /** @test */
+    public function list_can_be_merged_in_another_list()
+    {
+        $list = new DoublyLinkedList(30);
+        $list->push(40);
+        $list->push(50);
+        $this->list->mergeWith($list);
+        $this->assertSame([5, 10, 15, 30, 40, 50], $this->list->toArray());
     }
 }

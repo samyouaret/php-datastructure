@@ -8,7 +8,6 @@ use DataStructure\Stack;
 
 class StackTest extends TestCase
 {
-
     protected function setUp(): void
     {
         $this->stack = new Stack();

@@ -8,7 +8,6 @@ use DataStructure\Queue;
 
 class QueueTest extends TestCase
 {
-
     protected function setUp(): void
     {
         $this->queue = new Queue();

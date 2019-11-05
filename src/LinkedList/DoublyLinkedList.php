@@ -293,7 +293,7 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
     public function removeItem($item)
     {
         $this->ensureListNotEmpty();
-        $compare = is_callable($item) ? $item : self::class . '::compareItem';
+        $compare = $this->getCallback($item);
         //item is at first of list
         if ($compare($this->first->getValue(), $item)) {
             return $this->shift();
@@ -318,6 +318,37 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
         }
 
         return false;
+    }
+
+    /**
+     * search an element in list based on given value of item.
+     *
+     * @param mixed $item
+     *
+     * @return mixed
+     */
+    public function search($item)
+    {
+        $this->ensureListNotEmpty();
+        $compare = $this->getCallback($item);
+        if (
+            $compare($this->first->getValue(), $item) ||
+            $compare($this->last->getValue(), $item)
+        ) {
+            return true;
+        }
+        foreach ($this as  $value) {
+            if ($compare($value, $item)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getCallback($callback)
+    {
+        return is_callable($callback) ? $callback : self::class . '::compareItem';
     }
 
     public function compareItem($value, $item)
@@ -354,5 +385,67 @@ class DoublyLinkedList implements \Countable, AbstractList, \IteratorAggregate
     protected function decrement()
     {
         --$this->length;
+    }
+
+    public function map(callable $callback)
+    {
+        $list  = new DoublyLinkedList();
+        $this->each(function ($item) use ($list, $callback) {
+            $list->push($callback($item));
+        });
+        return $list;
+    }
+
+    public function filter(callable $callback)
+    {
+        $list  = new DoublyLinkedList();
+        $this->each(function ($item) use ($list, $callback) {
+            if ($callback($item)) {
+                $list->push($item);
+            }
+        });
+        return $list;
+    }
+
+    public function merge(DoublyLinkedList $list)
+    {
+        $newList = new DoublyLinkedList();
+        $closure = function ($item) use ($newList) {
+            $newList->push($item);
+        };
+        $this->each($closure);
+        $list->each($closure);
+        return $newList;
+    }
+
+    public function mergeWith(DoublyLinkedList $list)
+    {
+        $list->each(function ($item) {
+            $this->push($item);
+        });
+    }
+
+    public function reverse()
+    {
+        $newList = new DoublyLinkedList();
+        $mode = $this->getIterationMode();
+        $this->setIterationMode(DoublyLinkedListIterator::ITERATE_REVERSE);
+        $this->each(function ($item) use ($newList) {
+            $newList->push($item);
+        });
+        $this->setIterationMode($mode);
+        return $newList;
+    }
+
+    public function each(callable $callback)
+    {
+        foreach ($this as $item) {
+            $callback($item);
+        }
+    }
+
+    public function toArray()
+    {
+        return iterator_to_array($this);
     }
 }
