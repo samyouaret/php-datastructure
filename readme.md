@@ -24,17 +24,22 @@ Usage
 ------------
 
 ``DoublyLinkedList`` provides rich api the perform mostly tasks needed by linked list 
+
 and stacks and queues.
+
 create instance of ``DoublyLinkedList`` and push to it :
 
-.. code-bock:: php
+```php
+<?php
 
         $this->list = new DoublyLinkedList();
         $this->list->push(5);
+```
 
 ``DoublyLinkedList`` implements ``AbstractList`` so you can use all methods listed below :
 
-.. code-bock:: php
+```php
+<?php
 
     public function __construct($value); // optional initial value
     public function empty(): bool;
@@ -48,17 +53,29 @@ create instance of ``DoublyLinkedList`` and push to it :
     public function removeItem($item); //search and remove item return it,accepts callback compare     
     public function search($item); //search and item return it,accepts callback compare     
     public function clear(); //clear all items of list
- 
+    
+```
+
 ``Stack`` is a child of ``DoublyLinkedList` and provide alias to last method as top of list :
 
-.. code-bock:: php
+```php
+<?php
 
            public function top();//return top of list
 
-``Queue`` is a child of ``DoublyLinkedList`` implements ``AbstractQueue`` so it provides methods listed below just for convention and clarity since are just wrappers of ``doublylinkedList`` methods:
+```
 
-.. code-bock:: php
+``Queue`` is a child of ``DoublyLinkedList`` implements ``AbstractQueue`` so it provides 
+
+methods listed below just for convention and clarity since are just wrappers of 
+
+``doublylinkedList`` methods:
+
+```php
+<?php
 
     public function enqueue($value);
     public function dequeue();
     public function peek();
+
+```
